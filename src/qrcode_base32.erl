@@ -3,23 +3,23 @@
 % Licensed under the Apache License, Version 2.0 (the "License");
 % you may not use this file except in compliance with the License.
 % You may obtain a copy of the License at
-% 
+%
 % http://www.apache.org/licenses/LICENSE-2.0
-% 
+%
 % Unless required by applicable law or agreed to in writing, software
 % distributed under the License is distributed on an "AS IS" BASIS,
 % WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 % See the License for the specific language governing permissions and
 % limitations under the License.
 
--module(base32).
+-module(qrcode_base32).
 
 -export([encode/1, decode/1]).
 
 -define(BASE32_ALPHABET, {
-	$A, $B, $C, $D, $E, $F, $G, $H, 
-	$I, $J, $K, $L, $M, $N, $O, $P, 
-	$Q, $R, $S, $T, $U, $V, $W, $X, 
+	$A, $B, $C, $D, $E, $F, $G, $H,
+	$I, $J, $K, $L, $M, $N, $O, $P,
+	$Q, $R, $S, $T, $U, $V, $W, $X,
 	$Y, $Z, $2, $3, $4, $5, $6, $7
 }).
 
@@ -42,13 +42,13 @@ encode0(<<A:5, B:5, C:5, D:5, E:4>>, Acc) ->
 	<<Acc/binary, (b32e(A)), (b32e(B)), (b32e(C)), (b32e(D)), (b32e(E bsl 1)), "===">>;
 encode0(<<A:5, B:5, C:5, D:5, E:5, F:5, G:2>>, Acc) ->
 	<<Acc/binary, (b32e(A)), (b32e(B)), (b32e(C)), (b32e(D)), (b32e(E)), (b32e(F)), (b32e(G bsl 3)), "=">>.
-	
+
 %%
 decode(Bin) when is_binary(Bin) ->
 	Result = decode(Bin, <<>>),
 	true = is_binary(Result),
 	Result.
-	
+
 decode(<<X, "======">>, Acc) ->
 	Bits = decode0(X) bsr 2,
 	<<Acc/bits, Bits:3>>;
@@ -76,4 +76,4 @@ decode0(X) when X >= $2, X =< $7 ->
 b32e(X) ->
     element(X + 1, ?BASE32_ALPHABET).
 
-			
+
