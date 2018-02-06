@@ -14,7 +14,8 @@
         qrcode_base32
       ]
     },
-    {registered, [ppool]},
-    {mod, {qrcode, []}}
+    {registered, [qrcode]},
+    {applications, [kernel, stdlib]},
+    {env, []},
   ]
 }.
